@@ -10,7 +10,12 @@ const Main = () => {
 
   return (
     <div className="calendar-container">
-      <Calendar onChange={onChange} value={value} />
+      <Calendar
+        onChange={onChange}
+        value={value}
+        showNeighboringMonth={true}
+        showFixedNumberOfWeeks={false}
+      />
     </div>
   );
 };
