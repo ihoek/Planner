@@ -1,21 +1,17 @@
-import { useState } from "react";
-import Calendar from "react-calendar";
+//Main.tsx
+import CalendarComponent from "../Calendar/Calendar";
+import CalendarOption from "../CalendarOption/CalendarOption";
 import "./mainstyled.css";
 
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
 const Main = () => {
-  const [value, onChange] = useState<Value>(new Date()); // January 2024
-
   return (
-    <div className="calendar-container">
-      <Calendar
-        onChange={onChange}
-        value={value}
-        showNeighboringMonth={true}
-        showFixedNumberOfWeeks={false}
-      />
+    <div className="main-container">
+      <div className="login-container">
+        <CalendarOption />
+      </div>
+      <div className="calendar-container">
+        <CalendarComponent />
+      </div>
     </div>
   );
 };

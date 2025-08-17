@@ -1,0 +1,21 @@
+.calendar-option-container {
+  width: 100%;
+  height: 100%;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+
+  .calendar-option-button {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #000;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    transition: all 0.3s ease;
+  }
+}
