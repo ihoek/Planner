@@ -1,11 +1,14 @@
 //Signup.tsx
 import { useState } from "react";
 import "./SignupStyled.css";
+import axiosInstance from "../../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   //회원가입 폼 데이터
   const [formData, setFormData] = useState({
-    id: "",
+    userid: "",
     name: "",
     password: "",
   });
@@ -18,10 +21,22 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: 회원가입 로직 구현
-    console.log("회원가입 시도:", formData);
+    try {
+      const response = await axiosInstance.post("/auth/signup", formData);
+      console.log("회원가입 성공:", response.data);
+      // 회원가입 성공 시 폼 초기화
+      setFormData({
+        userid: "",
+        name: "",
+        password: "",
+      });
+      alert("회원가입 성공");
+      navigate("/login");
+    } catch (error) {
+      console.error("회원가입 실패:", error);
+    }
   };
 
   return (
@@ -32,8 +47,8 @@ const Signup = () => {
           <div className="input-group">
             <input
               type="text"
-              name="id"
-              value={formData.id}
+              name="userid"
+              value={formData.userid}
               onChange={handleChange}
               placeholder="ID"
               className="signup-input"

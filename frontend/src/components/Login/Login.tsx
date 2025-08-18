@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./LoginStyled.css";
+import axiosInstance from "../../utils/axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,10 +26,17 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: 로그인 로직 구현
     console.log("로그인 시도:", formData);
+    try {
+      await axiosInstance.post("/auth/login", formData);
+      alert("로그인 성공");
+      navigate("/");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
 
   return (
