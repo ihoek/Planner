@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { sequelize } from "./db.js";
 import authRouter from "./routers/auth.js";
@@ -17,6 +18,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 // 라우터 설정
 app.use("/auth", authRouter);
