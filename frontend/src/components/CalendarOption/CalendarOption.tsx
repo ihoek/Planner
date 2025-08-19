@@ -21,6 +21,7 @@ const CalendarOption = () => {
   };
 
   useEffect(() => {
+    // 토큰 검증
     verifyToken();
   }, []);
 
