@@ -3,7 +3,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { sequelize } from "./db.js";
+
+// 라우터
 import authRouter from "./routers/auth.js";
+import timeRouter from "./routers/time.js";
 
 dotenv.config();
 
@@ -21,7 +24,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 라우터 설정
-app.use("/auth", authRouter);
+app.use("/auth", authRouter); // user 관리
+app.use("/time", timeRouter); // 시간 관리
 
 // MySQL 연결
 async function testDBConnection() {

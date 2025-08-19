@@ -1,8 +1,21 @@
 // 타임라인 컴포넌트
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./TimeLine.css";
+import { useScheduleStore } from "../../store/scheduleStore";
 
-const TimeLine = () => {
+interface TimeLineProps {
+  date?: Date;
+}
+
+const TimeLine = ({ date = new Date() }: TimeLineProps) => {
+  const {
+    getSchedule,
+    addSchedule,
+    selectTimeSlot,
+    deselectTimeSlot,
+    selectedTimeSlots,
+  } = useScheduleStore();
+
   const [selectedSlots, setSelectedSlots] = useState<Set<string>>(new Set());
 
   // 00:00부터 24:00까지 30분 단위로 시간 생성
@@ -44,13 +57,31 @@ const TimeLine = () => {
     return "default";
   };
 
+  // 날짜를 문자열로 변환
+  const dateString = date.toISOString().split("T")[0];
+
+  // 기존 스케줄 불러오기
+  useEffect(() => {
+    const existingSchedule = getSchedule(dateString);
+    if (existingSchedule) {
+      const selected = new Set(
+        existingSchedule.timeSlots
+          .filter((slot) => slot.status === "selected")
+          .map((slot) => slot.time)
+      );
+      setSelectedSlots(selected);
+    }
+  }, [dateString, getSchedule]);
+
   // 슬롯 클릭 핸들러
   const handleSlotClick = (timeString: string) => {
     const newSelectedSlots = new Set(selectedSlots);
     if (newSelectedSlots.has(timeString)) {
       newSelectedSlots.delete(timeString);
+      deselectTimeSlot(dateString, timeString);
     } else {
       newSelectedSlots.add(timeString);
+      selectTimeSlot(dateString, timeString);
     }
     setSelectedSlots(newSelectedSlots);
   };

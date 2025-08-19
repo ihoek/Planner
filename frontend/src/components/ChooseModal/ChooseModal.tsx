@@ -1,6 +1,8 @@
 // 캘린더 날짜 선택 모달
 import "./ChooseModal.css";
 import TimeLine from "../TimeLine/TimeLine.tsx";
+import { useScheduleStore } from "../../store/scheduleStore";
+import { useUserStore } from "../../store/userStore";
 
 interface ChooseModalProps {
   date: Date;
@@ -8,12 +10,28 @@ interface ChooseModalProps {
 }
 
 const ChooseModal = ({ date, setIsModalOpen }: ChooseModalProps) => {
-  const handleSave = () => {
-    // 저장 로직 구현
-    console.log("저장되었습니다!");
-    setIsModalOpen(false);
+  const { addSchedule, selectedTimeSlots } = useScheduleStore();
+  const { isAuthenticated } = useUserStore();
 
-    // 저장 요청 보내기
+  const handleSave = () => {
+    if (!isAuthenticated) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    // 선택된 시간 슬롯들을 스케줄로 저장
+    const dateString = date.toISOString().split("T")[0];
+    const timeSlots = selectedTimeSlots
+      .filter((slot) => slot.startsWith(dateString))
+      .map((slot) => ({
+        time: slot.split("-")[1],
+        status: "selected" as const,
+      }));
+
+    addSchedule(dateString, timeSlots);
+
+    console.log("저장되었습니다!", { date: dateString, timeSlots });
+    setIsModalOpen(false);
   };
 
   return (
@@ -29,7 +47,7 @@ const ChooseModal = ({ date, setIsModalOpen }: ChooseModalProps) => {
           </span>
         </div>
         <div className="choose-modal-content">
-          <TimeLine />
+          <TimeLine date={date} />
         </div>
         <div className="choose-modal-footer">
           <button className="save-button" onClick={handleSave}>
